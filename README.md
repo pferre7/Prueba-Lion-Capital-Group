@@ -18,7 +18,7 @@ Permite gestionar tareas personales y compartirlas con otros usuarios que estén
 
 1. **Clonar el repositorio**
    ```bash
-   git clone <tu-repo.git> gestor-tareas
+   git clone https://github.com/pferre7/Prueba-Lion-Capital-Group gestor-tareas
    cd gestor-tareas
    ```
 
