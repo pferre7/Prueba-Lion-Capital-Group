@@ -18,7 +18,7 @@ Permite gestionar tareas personales y compartirlas con otros usuarios que estén
 
 1. **Clonar el repositorio**
    ```bash
-   git clone <tu-repo.git> gestor-tareas
+   git clone https://github.com/pferre7/Prueba-Lion-Capital-Group gestor-tareas
    cd gestor-tareas
    ```
 
@@ -33,6 +33,7 @@ Permite gestionar tareas personales y compartirlas con otros usuarios que estén
    php artisan key:generate
    ```
    - Ajusta en `.env`: `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
+   - DB_DATABASE=db-test-lcg, el resto tal como está
 
 4. **Instalar dependencias JS y compilar assets**
    ```bash
@@ -44,7 +45,7 @@ Permite gestionar tareas personales y compartirlas con otros usuarios que estén
 5. **Migrar y semillar la base de datos**
    ```bash
    php artisan migrate
-   # Opcional: php artisan db:seed
+   # Opcional: php artisan db:seed para agregar usuarios de prueba
    ```
 
 6. **Ejecutar el servidor local**
@@ -72,12 +73,11 @@ La aplicación está organizada de forma clara siguiendo las convenciones de Lar
 
 - **CRUD** de tareas: crear, listar, editar, eliminar.
 - **Completar/Reabrir** tareas con AJAX (fetch API).
-- **Compartir** tarea duplicándola a otro usuario por email.
+- **Compartir** tarea a otro usuario por email (éste debe estar registrado en la aplicación).
 - **Filtrar** por estado (`pending`, `completed`).
 - **Ordenar** por fecha de vencimiento (ascendente/descendente).
-- **Autenticación** con Laravel Breeze (login, registro).
-- **Autorización** con políticas: solo el dueño puede modificar o borrar (aunque hay alguno errores por corregir, 
-y en las funciones del controlador no usamos el metodo authorize()).
+- **Autenticación** con Laravel Breeze.
+- **Autorización** con políticas: solo el dueño puede modificar o borrar.
 
 ---
 
@@ -107,16 +107,8 @@ Actualmente, la aplicacion esta hecha con dos usuarios de prueba, dichos usuario
 ## Rutas principales
 
 ```bash
-GET      /                       # Redirige a login o dashboard
-GET      /dashboard              # Dashboard de tareas
+GET      /                       # Redirige a login
 POST     /tasks/{task}/toggle    # Completar/Reabrir tarea
 POST     /tasks/{task}/share     # Compartir tarea
 RESOURCE /tasks                  # Rutas CRUD (index, store, update, destroy, etc.)
 ``` 
-
----
-
-## Contribuciones
-
-- Abre un *issue* para sugerencias o errores.
-- Envía un *pull request* con mejoras.
