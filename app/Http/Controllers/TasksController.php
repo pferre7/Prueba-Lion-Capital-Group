@@ -10,7 +10,10 @@ class TasksController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Task::where('user_id', auth()->id());
+        $query = Task::where('owner_id', auth()->id())
+            ->orWhereHas('sharedWith', function($q) {
+                $q->where('user_id', auth()->id());
+            });
 
         if ($request->status === 'pending') {
             $query->where('status', 'pending');
@@ -35,8 +38,9 @@ class TasksController extends Controller
             'description' => 'required|string',
             'due_date'    => 'required|date',
         ]);
-        $data['user_id'] = auth()->id();
-        $data['status']  = 'pending';
+        $data['user_id']  = auth()->id();
+        $data['owner_id'] = auth()->id();
+        $data['status']   = 'pending';
         Task::create($data);
 
         return redirect()->route('tasks.index');
@@ -44,11 +48,17 @@ class TasksController extends Controller
 
     public function update(Request $request, Task $task)
     {
+        // Solo el owner original puede editar
+        if (auth()->id() !== $task->owner_id) {
+            abort(403);
+        }
+
         $data = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
             'due_date'    => 'required|date',
         ]);
+
         $task->update($data);
 
         return redirect()->route('tasks.index');
@@ -56,6 +66,11 @@ class TasksController extends Controller
 
     public function destroy(Task $task)
     {
+        // Solo el owner original puede borrar
+        if (auth()->id() !== $task->owner_id) {
+            abort(403);
+        }
+
         $task->delete();
 
         return redirect()->route('tasks.index');
@@ -71,23 +86,14 @@ class TasksController extends Controller
     public function share(Request $request, Task $task)
     {
         $request->validate(['email' => 'required|email']);
+        $recipient = User::where('email', $request->email)->firstOrFail();
 
-        $recipient = User::where('email', $request->email)->first();
-        if (! $recipient) {
-            return redirect()->route('tasks.index')
-                            ->withErrors(['email' => 'Usuario no encontrado.']);
-        }
-
-        // Duplicar tarea al destinatario, copia carbon
-        Task::create([
-            'title'       => $task->title,
-            'description' => $task->description,
-            'due_date'    => $task->due_date,
-            'user_id'     => $recipient->id,
-            'status'      => 'pending',
+        // Vincular usuario a la tarea sin duplicar
+        $task->sharedWith()->syncWithoutDetaching([
+            $recipient->id
         ]);
 
         return redirect()->route('tasks.index')
-                        ->with('success', "Tarea compartida con {$recipient->email}");
+                         ->with('success', "Tarea compartida con {$recipient->email}");
     }
 }
