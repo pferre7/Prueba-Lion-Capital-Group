@@ -76,8 +76,7 @@ La aplicación está organizada de forma clara siguiendo las convenciones de Lar
 - **Filtrar** por estado (`pending`, `completed`).
 - **Ordenar** por fecha de vencimiento (ascendente/descendente).
 - **Autenticación** con Laravel Breeze (login, registro).
-- **Autorización** con políticas: solo el dueño puede modificar o borrar (aunque hay alguno errores por corregir, 
-y en las funciones del controlador no usamos el metodo authorize()).
+- **Autorización** con políticas: solo el dueño puede modificar o borrar.
 
 ---
 
@@ -113,10 +112,3 @@ POST     /tasks/{task}/toggle    # Completar/Reabrir tarea
 POST     /tasks/{task}/share     # Compartir tarea
 RESOURCE /tasks                  # Rutas CRUD (index, store, update, destroy, etc.)
 ``` 
-
----
-
-## Contribuciones
-
-- Abre un *issue* para sugerencias o errores.
-- Envía un *pull request* con mejoras.
