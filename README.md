@@ -33,6 +33,7 @@ Permite gestionar tareas personales y compartirlas con otros usuarios que estén
    php artisan key:generate
    ```
    - Ajusta en `.env`: `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
+   - DB_DATABASE=db-test-lcg, el resto tal como está
 
 4. **Instalar dependencias JS y compilar assets**
    ```bash
