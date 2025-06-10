@@ -10,24 +10,22 @@ class TasksController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Task::where('owner_id', auth()->id())
-            ->orWhereHas('sharedWith', function($q) {
-                $q->where('user_id', auth()->id());
+        $query = Task::where(function($q) {
+                $q->where('owner_id', auth()->id())
+                ->orWhereHas('sharedWith', function($q2) {
+                    $q2->where('user_id', auth()->id());
+                });
             });
 
-        if ($request->status === 'pending') {
-            $query->where('status', 'pending');
-        } elseif ($request->status === 'completed') {
-            $query->where('status', 'completed');
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
-        if ($request->sort === 'due_desc') {
-            $query->orderBy('due_date', 'desc');
-        } else {
-            $query->orderBy('due_date', 'asc');
-        }
+        $direction = $request->sort === 'due_desc' ? 'desc' : 'asc';
+        $query->orderBy('due_date', $direction);
 
         $tasks = $query->get();
+
         return view('tasks.index', compact('tasks'));
     }
 
