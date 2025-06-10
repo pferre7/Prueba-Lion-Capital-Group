@@ -72,10 +72,10 @@ La aplicación está organizada de forma clara siguiendo las convenciones de Lar
 
 - **CRUD** de tareas: crear, listar, editar, eliminar.
 - **Completar/Reabrir** tareas con AJAX (fetch API).
-- **Compartir** tarea duplicándola a otro usuario por email.
+- **Compartir** tarea a otro usuario por email (éste debe estar registrado en la aplicación).
 - **Filtrar** por estado (`pending`, `completed`).
 - **Ordenar** por fecha de vencimiento (ascendente/descendente).
-- **Autenticación** con Laravel Breeze (login, registro).
+- **Autenticación** con Laravel Breeze.
 - **Autorización** con políticas: solo el dueño puede modificar o borrar.
 
 ---
