@@ -106,8 +106,7 @@ Actualmente, la aplicacion esta hecha con dos usuarios de prueba, dichos usuario
 ## Rutas principales
 
 ```bash
-GET      /                       # Redirige a login o dashboard
-GET      /dashboard              # Dashboard de tareas
+GET      /                       # Redirige a login
 POST     /tasks/{task}/toggle    # Completar/Reabrir tarea
 POST     /tasks/{task}/share     # Compartir tarea
 RESOURCE /tasks                  # Rutas CRUD (index, store, update, destroy, etc.)
