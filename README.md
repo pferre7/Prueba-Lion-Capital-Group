@@ -44,7 +44,7 @@ Permite gestionar tareas personales y compartirlas con otros usuarios que estén
 5. **Migrar y semillar la base de datos**
    ```bash
    php artisan migrate
-   # Opcional: php artisan db:seed
+   # Opcional: php artisan db:seed para agregar usuarios de prueba
    ```
 
 6. **Ejecutar el servidor local**
