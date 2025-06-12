@@ -31,24 +31,40 @@
     @yield('content')
 </main>
 <script>
-    function toggleComplete(id) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var btnToggle = document.getElementById('btn-toggle');
+    var data = {
+        status: ''
+    };
+
+    function toggleComplete(id, btnToggle) {
+        const currentStatus = btnToggle.getAttribute('data-status');
+        const newStatus = currentStatus === 'completed' ? 'pending' : 'completed';
+
         fetch(`${window.location.origin}/tasks/${id}/toggle`, {
             method: 'POST',
-            credentials: 'same-origin',
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ status: newStatus })
         })
         .then(response => {
-            if (!response.ok) throw new Error(response.statusText);
-            return response;
+            if (!response.ok) throw new Error('Error en la respuesta');
+            return response.text().then(text => text ? JSON.parse(text) : {});
         })
-        .then(() => location.reload())
-        .catch(error => console.error('Toggle failed:', error));
+        .then(data => {
+            btnToggle.innerText = newStatus === 'completed' ? 'Reabrir' : 'Completar';
+            btnToggle.setAttribute('data-status', newStatus);
+            btnToggle.classList.toggle('bg-green-500', newStatus === 'pending');
+            btnToggle.classList.toggle('bg-yellow-500', newStatus === 'completed');
+        })
+        .catch(error => {
+            console.error('Error en la petición:', error);
+        });
     }
+    
     function showCreateForm() {
         document.getElementById('createForm').classList.remove('hidden');
     }

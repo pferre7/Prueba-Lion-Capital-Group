@@ -78,7 +78,7 @@ class TasksController extends Controller
     {
         $task->update(['status' => $task->status === 'completed' ? 'pending' : 'completed']);
 
-        return response()->noContent();
+        return response()->json(['success' => true, 'status' => $task->status]);
     }
 
     public function share(Request $request, Task $task)
